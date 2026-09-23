@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="theme-color" content="#1b4d35"/>
+<title>LCS Screenshot — BPP Unaaha</title>
+<link rel="stylesheet" href="https://hasansilondae21.github.io/lcs-bpp-unaaha/style.css"/>
+</head>
+<body>
+
+<header>
+  <div class="hlogo">🌾</div>
+  <div>
+    <h1>Rekap LCS Screenshot</h1>
+    <p>BPP Unaaha — Kabupaten Konawe</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('input',this)">📤 Input</button>
+  <button class="tab" onclick="switchTab('rekap',this)">📋 Rekap</button>
+  <button class="tab" onclick="switchTab('admin',this)">🔐 Admin</button>
+</div>
+
+<main>
+
+  <!-- ══ TAB INPUT ══ -->
+  <div id="view-input" class="view active">
+    <div class="card">
+      <div class="card-title">Form Input LCS Screenshot</div>
+      <div style="margin-bottom:14px">
+        <label>Nama Penyuluh</label>
+        <div class="select-wrap">
+          <select id="sel-nama"><option value="">— Pilih nama Anda —</option></select>
+        </div>
+      </div>
+      <div>
+        <label>Screenshot LCS</label>
+        <div class="drop" id="dz">
+          <input type="file" id="inp-file" accept="image/*" capture="environment"/>
+          <div class="drop-icon">📷</div>
+          <div class="drop-txt">Ketuk untuk memilih foto</div>
+          <div class="drop-hint">atau seret / tempel (Ctrl+V) di desktop</div>
+          <img class="drop-prev" id="dz-prev" alt="preview"/>
+          <div class="drop-name" id="dz-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" id="status-title">Status Input Hari Ini</div>
+      <div id="status-grid" class="status-grid">
+        <div class="empty"><div class="empty-icon">⏳</div>Memuat status...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB REKAP ══ -->
+  <div id="view-rekap" class="view">
+    <div class="card">
+      <div class="card-title">Filter Data</div>
+      <div class="filter-row">
+        <div class="select-wrap">
+          <select id="f-nama"><option value="">Semua Penyuluh</option></select>
+        </div>
+        <div class="select-wrap">
+          <select id="f-tgl"><option value="">Semua Tanggal</option></select>
+        </div>
+      </div>
+      <div class="row-btn">
+        <button class="btn btn-primary btn-sm" onclick="muatRekap()">🔍 Tampilkan</button>
+        <button class="btn btn-outline btn-sm" onclick="resetFilter()">✕ Reset</button>
+      </div>
+      <div class="row-btn" style="margin-top:10px">
+        <button class="btn btn-outline" id="btn-dl-semua" onclick="downloadSemuaFoto()" style="display:none">⬇ Semua Foto</button>
+        <button class="btn btn-dark" id="btn-pdf" onclick="downloadPDF()" disabled>⬇ Download PDF</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Data Rekap</div>
+      <div id="rekap-body">
+        <div class="empty"><div class="empty-icon">📋</div>Klik Tampilkan untuk memuat data.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB ADMIN ══ -->
+  <div id="view-admin" class="view">
+    <div class="card">
+      <div class="card-title">🔐 Akses Admin</div>
+      <div class="pin-wrap">
+        <input type="password" id="inp-pin" placeholder="Masukkan PIN"
+          maxlength="20" onkeydown="if(event.key==='Enter')aksesAdmin()"/>
+        <button class="btn btn-primary" onclick="aksesAdmin()">Masuk</button>
+      </div>
+      <div id="pin-error">❌ PIN salah, coba lagi.</div>
+    </div>
+    <div id="admin-panel" style="display:none">
+      <div class="card">
+        <div class="card-title">Kelola Data</div>
+        <div class="filter-row">
+          <div class="select-wrap">
+            <select id="af-nama"><option value="">Semua Penyuluh</option></select>
+          </div>
+          <div class="select-wrap">
+            <select id="af-tgl-sel"><option value="">Semua Tanggal</option></select>
+          </div>
+        </div>
+        <div class="row-btn">
+          <button class="btn btn-primary btn-sm" onclick="muatAdmin()">🔍 Tampilkan</button>
+          <button class="btn btn-outline btn-sm" onclick="resetAdmin()">✕ Reset</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Data — Ketuk 🗑 untuk Hapus</div>
+        <div id="admin-body">
+          <div class="empty"><div class="empty-icon">📋</div>Klik Tampilkan untuk memuat data.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Floating button (input tab only) -->
+<div class="float-wrap" id="float-wrap">
+  <button class="btn btn-primary" onclick="kirimData()">⬆ Kirim Screenshot</button>
+</div>
+
+<!-- Download progress -->
+<div id="dl-progress"></div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div id="konfirm-bg">
+  <div id="konfirm-box">
+    <h3>⚠ Konfirmasi Hapus</h3>
+    <p>Anda akan menghapus data milik:<br>
+      <strong id="konfirm-nama">—</strong><br>
+      Tanggal: <strong id="konfirm-tgl">—</strong><br><br>
+      Data dan foto akan dihapus permanen.
+    </p>
+    <div class="konfirm-btn-row">
+      <button class="btn btn-outline" onclick="batalHapus()">Batal</button>
+      <button class="btn-hapus-ok" onclick="eksekusiHapus()">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Foto -->
+<div id="modal-bg" onclick="tutupModal(event)">
+  <div id="modal-box">
+    <div id="modal-header">
+      <div>
+        <div id="modal-judul">—</div>
+        <div id="modal-sub">—</div>
+      </div>
+      <button class="modal-close" onclick="tutupModal(null)">✕</button>
+    </div>
+    <div id="modal-body">
+      <div id="modal-loading"><div class="spinner"></div>Memuat foto...</div>
+      <img id="modal-img" alt="screenshot"/>
+      <div id="modal-error">Gagal memuat foto.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Print pages -->
+<div id="print-pages"></div>
+
+<!-- Loading overlay -->
+<div id="overlay"><div class="spinner"></div><div id="ov-msg">Memuat...</div></div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="https://hasansilondae21.github.io/lcs-bpp-unaaha/app.js"></script>
+</body>
+</html>
