@@ -258,14 +258,15 @@ function renderRekap(data) {
   btnDl.style.display = document.getElementById('f-nama').value ? 'flex' : 'none';
   var html = '<div class="tbl-wrap"><table>'
     +'<thead><tr><th>#</th><th>Nama</th><th>Tanggal</th><th>Foto</th></tr></thead><tbody>';
-  data.forEach(function(r,i){
+   data.forEach(function(r,i){
     html += '<tr>'
-      +'<td>'+( i+1)+'</td>'
+      +'<td>'+(i+1)+'</td>'
       +'<td><strong>'+esc(r.nama)+'</strong></td>'
       +'<td>'+esc(r.tanggal)+'</td>'
       +'<td><div class="td-aksi">'
       +'<button class="btn btn-outline btn-sm" onclick="lihatFoto('+i+')">🖼 Lihat</button>'
       +'<button class="btn btn-outline btn-sm" onclick="downloadFoto('+i+')">⬇ Unduh</button>'
+      +'<button class="btn btn-sm" style="background:#fdf2f1;color:#b83232;border:1.5px solid #f5c6c2" onclick="konfirmasiHapus(\''+r.id+'\',\''+esc(r.nama)+'\',\''+esc(r.tanggal)+'\')">🗑 Hapus</button>'
       +'</div></td>'
       +'</tr>';
   });
@@ -466,10 +467,13 @@ function batalHapus(){
 function eksekusiHapus(){
   batalHapus();
   overlay(true,'Menghapus data...');
-  gasCall('hapusDataAdmin',{uid:hapusTargetUid,pin:adminPin},function(res){
+  gasCall('hapusDataAdmin',{uid:hapusTargetUid,pin:'2026'},function(res){
     overlay(false);
-    if(res.ok){ toast('✓ Data berhasil dihapus','ok'); muatAdmin(); muatStatus(); }
-    else toast('Gagal: '+res.error,'er');
+    if(res.ok){
+      toast('✓ Data berhasil dihapus','ok');
+      muatRekap();
+      muatStatus();
+    } else toast('Gagal: '+res.error,'er');
   },function(e){ overlay(false); toast('Error: '+e.message,'er'); });
 }
 
