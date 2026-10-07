@@ -253,7 +253,7 @@ function renderRekap(data) {
   btnDl.style.display = document.getElementById('f-nama').value ? 'flex' : 'none';
   var html = '<div class="tbl-wrap"><table>'
     +'<thead><tr><th>#</th><th>Nama</th><th>Tanggal</th><th>Foto</th></tr></thead><tbody>';
-    data.forEach(function(r,i){
+data.forEach(function(r,i){
     html += '<tr>'
       +'<td>'+(i+1)+'</td>'
       +'<td><strong>'+esc(r.nama)+'</strong></td>'
