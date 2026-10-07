@@ -5,7 +5,7 @@
 ══════════════════════════════════════════════ */
 
 // ── GANTI URL INI dengan URL deployment Apps Script Anda ──
-var GAS_URL = 'GANTI_DENGAN_URL_DEPLOYMENT_APPS_SCRIPT';
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbxCAlCtV4yKgI4r5W7x4So-EvfrQ7FPavInOYcRUlpfiVr1Qiael4MBgbnigO8NiSfw/exec';
 
 // ══ STATE ══════════════════════════════════════
 var PENYULUH     = [];
