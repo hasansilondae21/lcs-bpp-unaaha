@@ -26,7 +26,7 @@ function gasCall(action, params, onSuccess, onError) {
 
   window[callbackName] = function(res) {
     delete window[callbackName];
-    document.head.removeChild(script);
+    if (document.head.contains(script)) document.head.removeChild(script);
     clearTimeout(timer);
     onSuccess(res);
   };
@@ -45,6 +45,24 @@ function gasCall(action, params, onSuccess, onError) {
     if (onError) onError({message:'Gagal menghubungi server'});
   };
   document.head.appendChild(script);
+}
+
+// Khusus untuk kirim data besar (foto) pakai fetch POST
+function gasPost(params, onSuccess, onError) {
+  var url = GAS_URL;
+  fetch(url, {
+    method : 'POST',
+    mode   : 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body   : JSON.stringify(params)
+  })
+  .then(function() {
+    // no-cors tidak bisa baca response, jadi polling status
+    onSuccess({ ok: true });
+  })
+  .catch(function(e) {
+    if (onError) onError({ message: e.message });
+  });
 }
 
 // ══ INIT ═══════════════════════════════════════
