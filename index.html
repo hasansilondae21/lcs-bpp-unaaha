@@ -7,14 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#1b4d35"/>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LCS Screenshot — BPP Unaaha</title>
 <link rel="stylesheet" href="https://hasansilondae21.github.io/lcs-bpp-unaaha/style.css"/>
-<style>
-  html,body{margin:0;padding:0;height:100%;overflow:hidden}
-  iframe{width:100%;height:100vh;border:none;display:block}
-</style>
 </head>
 <body>
 
@@ -47,7 +41,7 @@
       <div>
         <label>Screenshot LCS</label>
         <div class="drop" id="dz">
-          <input type="file" id="inp-file" accept="image/*"/>
+          <input type="file" id="inp-file" accept="image/*" capture="environment"/>
           <div class="drop-icon">📷</div>
           <div class="drop-txt">Ketuk untuk memilih foto</div>
           <div class="drop-hint">atau seret / tempel (Ctrl+V) di desktop</div>
@@ -184,6 +178,5 @@
 <div id="toast"></div>
 
 <script src="https://hasansilondae21.github.io/lcs-bpp-unaaha/app.js"></script>
-<iframe src="GANTI_DENGAN_URL_DEPLOYMENT_APPS_SCRIPT" allowfullscreen></iframe>
 </body>
 </html>
